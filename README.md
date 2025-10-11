@@ -24,7 +24,6 @@ This repo contains my solutions, notes, and implementations of common data struc
 
 
 🚀 Goals
-
-Strengthen problem-solving skills
-Improve time & space complexity analysis
-Prepare for coding interviews and contests
+-> Strengthen problem-solving skills.
+-> Improve time & space complexity analysis.
+-> Prepare for coding interviews and contests.
