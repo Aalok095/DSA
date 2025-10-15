@@ -10,9 +10,8 @@ class Solution {
                 prevSum = currSum;
                 currSum = 1;
             }
-            if(currSum/2>k) k = currSum/2;
-            int a = Math.min(currSum,prevSum);
-            if(a>k) k = a;
+            k = Math.max(k,currSum/2);
+            k = Math.max(k,Math.min(prevSum,currSum));
         }
         return k;
     }
