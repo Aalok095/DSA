@@ -1,21 +1,25 @@
 class Solution {
-    public int minSubArrayLen(int t, int[] nums) {
+    public int minSubArrayLen(int t,int[] nums) {
         int n = nums.length;
-        int minlen = Integer.MAX_VALUE;
-        int sum = 0;
-        int i=0,j=0;
-        while(j<n){
-            sum += nums[j];
+        int i=0,j=0,sum = 0;
 
-            //chota karna chah rahe hai window ko
-            while(sum >= t){
-                minlen = Math.min(minlen,j-i+1);
-                sum -= nums[i];
-                i++;
-            }
-
-            j++;
+        while(j<n && sum<t){
+            sum+=nums[j++];
         }
-        return minlen == Integer.MAX_VALUE ? 0 : minlen;
+
+        j--;// j ek aage hoga above loop ke wajah se
+        int minLen = Integer.MAX_VALUE;
+        while(i<n && j<n){
+
+            if(sum>=t) minLen = Math.min(minLen,j-i+1); // if sum >= target then only calc
+            sum-=nums[i];
+            i++;j++;// j++ is imp nahi to niche wale loop mai value dubara add hogi mere tau k bete ...... aur agar niche wala loop nahi chala to minus to ho hi raha hai
+            
+            while(j<n && sum<t){
+                sum+=nums[j++];
+            }
+            j--;
+        }
+        return minLen == Integer.MAX_VALUE ? 0 : minLen;
     }
 }
