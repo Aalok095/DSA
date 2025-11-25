@@ -4,7 +4,7 @@ class Solution {
 
         // Numbers made of only 1s can NEVER be divisible by 2 or 5
         if(k%2==0 || k%5==0) return -1;
-
+        
         int rem = 0;
         for(int i=1;i<=k;i++){
             rem = (rem*10+1)%k;
