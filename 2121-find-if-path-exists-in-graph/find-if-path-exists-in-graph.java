@@ -1,5 +1,5 @@
 class Solution {
-    public void bfs(int start,boolean[] vis,List<List<Integer>> adj){
+    public void bfs(int start,int end,boolean[] vis,List<List<Integer>> adj){
         vis[start] = true;
         Queue<Integer> q = new ArrayDeque<>();
         q.add(start);
@@ -9,6 +9,7 @@ class Solution {
                 if(!vis[ele]){
                     q.add(ele);
                     vis[ele] = true;
+                    if(ele==end) return;
                 }
             }
         }
@@ -26,7 +27,7 @@ class Solution {
         }
 
         boolean[] vis = new boolean[n];
-        bfs(start,vis,adj);
+        bfs(start,end,vis,adj);
         return vis[end];
     }
 }
