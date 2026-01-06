@@ -1,30 +1,32 @@
 class Solution {
+    static boolean ans;
+    public void dfs(int i,List<List<Integer>> adj,boolean[] path,boolean[] vis){
+        vis[i]=true;
+        path[i] = true;
+        for(int ele : adj.get(i)){
+            if(path[ele]){
+                ans = false;
+                return;
+            }
+            if(!vis[ele])dfs(ele,adj,path,vis);
+        }
+        path[i] = false;
+    }
     public boolean canFinish(int n, int[][] prereq) {
-        
+        ans = true; // true -> np cycle
         List<List<Integer>> adj = new ArrayList<>();
         for(int i=0;i<n;i++) adj.add(new ArrayList<>());
-
-        int[] in = new int[n]; // indegree array
 
         for(int[] p : prereq){
             int a = p[0],b = p[1]; // b -> a edge ja rahi hai
             adj.get(b).add(a);
-            in[a]++;// populating indegree too
         }
-
-        // kahn's algorithm
-        Queue<Integer> q = new ArrayDeque<>();
-        List<Integer> ans = new ArrayList<>();
-        for(int i=0;i<n;i++) if(in[i]==0) q.add(i);
-        
-        while(q.size()>0){
-            int front = q.poll();
-            ans.add(front);
-            for(int ele : adj.get(front)){
-                in[ele]--;
-                if(in[ele]==0) q.add(ele);
-            }
+        boolean[] vis = new boolean[n];
+        boolean[] path = new boolean[n];
+        // dfs 
+        for(int i=0;i<n;i++){
+            if(!vis[i]) dfs(i,adj,path,vis);
         }
-        return ans.size()==n;
+        return ans;
     }
 }
