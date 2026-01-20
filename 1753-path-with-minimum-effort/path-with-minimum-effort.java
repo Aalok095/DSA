@@ -24,6 +24,7 @@ class Solution {
         for(int[] row : ans) Arrays.fill(row,Integer.MAX_VALUE);
         ans[0][0] = 0;
 
+        int[][] dir = {{1,0},{0,1},{-1,0},{0,-1}};
         PriorityQueue<Triplet> pq = new PriorityQueue<>();// bkl Dijkstra suru
         pq.add(new Triplet(0,0,0));
 
@@ -31,51 +32,24 @@ class Solution {
 
             Triplet top = pq.poll();
             int row = top.row,col = top.col,effort = top.effort;
+            if(row==m-1 && col==n-1) break; // min heap mai aa gaya ans m-1,n-1 wala 
+            
+            for(int i=0;i<4;i++){
 
-            if(row>0){// going up
+                int nr = row + dir[i][0];
+                int nc = col + dir[i][1];
 
-                int e = Math.abs(arr[row][col]-arr[row-1][col]);
+                if(nr<0 || nc<0 || nr>=m || nc>=n) continue;
+
+                int e = Math.abs(arr[row][col]-arr[nr][nc]);
                 e = Math.max(e,effort);
 
-                if(e < ans[row-1][col]){
-                    ans[row-1][col] = e;
-                    pq.add(new Triplet(row-1,col,e));
-                }
-            }
-
-            if(col>0){ // going left
-
-                int e = Math.abs(arr[row][col]-arr[row][col-1]);
-                e = Math.max(e,effort);
-
-                if(e < ans[row][col-1]){
-                    ans[row][col-1] = e;
-                    pq.add(new Triplet(row,col-1,e));
-                }
-            }
-
-            if(row<m-1){// going down
-
-                int e = Math.abs(arr[row][col]-arr[row+1][col]);
-                e = Math.max(e,effort);
-
-                if(e < ans[row+1][col]){
-                    ans[row+1][col] = e;
-                    pq.add(new Triplet(row+1,col,e));
-                }
-            }
-            if(col<n-1){// goint right
-
-                int e = Math.abs(arr[row][col]-arr[row][col+1]);
-                e = Math.max(e,effort);
-
-                if(e < ans[row][col+1]){
-                    ans[row][col+1] = e;
-                    pq.add(new Triplet(row,col+1,e));
+                if(e < ans[nr][nc]){
+                    ans[nr][nc] = e;
+                    pq.add(new Triplet(nr,nc,e));
                 }
             }
         }
-
         return ans[m-1][n-1];
     }
 }
