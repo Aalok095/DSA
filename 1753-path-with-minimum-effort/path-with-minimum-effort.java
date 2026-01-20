@@ -5,10 +5,10 @@ class Solution {
         int col;
         int effort;
 
-        public Triplet(int row,int col,int dist){
+        public Triplet(int row,int col,int effort){
             this.row = row;
             this.col = col;
-            this.effort = dist;
+            this.effort = effort;
         }
 
         public int compareTo(Triplet t){
