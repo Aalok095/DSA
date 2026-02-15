@@ -26,7 +26,7 @@ class Solution {
                     carry = '1';
                 } 
             }
-            else if(val1=='0' && val2=='0'){
+            else {
                 if(carry=='0'){
                     sb.append('0');
                 }
