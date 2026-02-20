@@ -7,8 +7,7 @@ class Solution {
             sum += (s.charAt(i)=='1') ? 1 : -1;
             if(sum==0){
                 String inner = s.substring(start+1,i);
-                String processed = "1"+makeLargestSpecial(inner)+"0";
-                list.add(processed);
+                list.add("1"+makeLargestSpecial(inner)+"0");
                 start = i+1;
             }
         }
