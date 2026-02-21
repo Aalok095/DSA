@@ -1,17 +1,11 @@
 class Solution {
-    public boolean isPrime(int n){
-        if(n<=1) return false;
-        for(int i=2;i<=n-1;i++){
-            if(n%i==0) return false;
-        }
-        return true;
-    }
     public int countPrimeSetBits(int l, int r) {
-        int x = 0;
-        for(int i=l;i<=r;i++){
-            int c = Integer.bitCount(i);
-            if(isPrime(c)) x++;
-        }
-        return x;
+        boolean[] prime = new boolean[33];
+        int[] primes = {2,3,5,7,11,13,17,19,23,29,31};
+        for(int p : primes) prime[p] = true;
+
+        int c = 0;
+        for(int i = l;i <= r;i++) if(prime[Integer.bitCount(i)]) c++;
+        return c;
     }
 }
