@@ -22,24 +22,19 @@ class Solution {
 
             return dp[i][j][k] = coins[i][j] + best;
         } else {
-            // take loss
             down = solve(i + 1, j, coins, k, dp);
             right = solve(i, j + 1, coins, k, dp);
 
             int loss = Integer.MIN_VALUE;
-            int best = Math.max(down, right);
-            if (best != Integer.MIN_VALUE) {
-                loss = coins[i][j] + best;
-            }
+            int best = Math.max(down,right);
+            if (best != Integer.MIN_VALUE) loss = coins[i][j] + best;
 
-            // skip
             int skip = Integer.MIN_VALUE;
             if (k > 0) {
                 down = solve(i + 1, j, coins, k - 1, dp);
                 right = solve(i, j + 1, coins, k - 1, dp);
                 skip = Math.max(down, right);
             }
-
             return dp[i][j][k] = Math.max(loss, skip);
         }
     }
