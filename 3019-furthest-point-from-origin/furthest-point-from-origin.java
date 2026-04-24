@@ -6,7 +6,6 @@ class Solution {
             else if(ele=='R') r++;
             else d++;
         }
-        if(l==r) return l+d-r;
-        return Math.max(l,r)+d-Math.min(l,r);
+        return Math.abs(l-r)+d;
     }
 }
