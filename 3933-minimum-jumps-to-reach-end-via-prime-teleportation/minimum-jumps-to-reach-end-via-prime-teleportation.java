@@ -1,115 +1,111 @@
 class Solution {
 
-    static final int MAX = 1000000;
-    static boolean[] prime = sieve();
+    private boolean[] isPrime;
+
+    private void buildSieve(int maxEl) {
+
+        isPrime = new boolean[maxEl + 1];
+        Arrays.fill(isPrime, true);
+
+        if(maxEl >= 0) isPrime[0] = false;
+        if(maxEl >= 1) isPrime[1] = false;
+
+        for(int num = 2; num * num <= maxEl; num++) {
+
+            if(isPrime[num]) {
+
+                for(int multiple = num * num;
+                    multiple <= maxEl;
+                    multiple += num) {
+
+                    isPrime[multiple] = false;
+                }
+            }
+        }
+    }
 
     public int minJumps(int[] nums) {
 
         int n = nums.length;
 
-        Map<Integer, List<Integer>> map = new HashMap<>();
+        HashMap<Integer, List<Integer>> mp = new HashMap<>();
+        int maxEl = 0;
 
-        // Build prime factor -> indices map
-        for (int i = 0; i < n; i++) {
+        for(int i = 0; i < n; i++) {
 
-            int x = nums[i];
+            mp.computeIfAbsent(nums[i], k -> new ArrayList<>()).add(i);
 
-            for (int p : getPrimeFactors(x)) {
-                map.computeIfAbsent(p, k -> new ArrayList<>()).add(i);
-            }
+            maxEl = Math.max(maxEl, nums[i]);
         }
 
-        Queue<Integer> q = new LinkedList<>();
-        boolean[] vis = new boolean[n];
+        buildSieve(maxEl);
 
-        q.offer(0);
-        vis[0] = true;
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[n];
+
+        queue.offer(0);
+        visited[0] = true;
+
+        HashSet<Integer> seen = new HashSet<>();
 
         int steps = 0;
 
-        while (!q.isEmpty()) {
+        while(!queue.isEmpty()) {
 
-            int size = q.size();
+            int size = queue.size();
 
-            while (size-- > 0) {
+            while(size-- > 0) {
 
-                int i = q.poll();
+                int i = queue.poll();
 
-                if (i == n - 1) return steps;
-
-                // adjacent left
-                if (i - 1 >= 0 && !vis[i - 1]) {
-                    vis[i - 1] = true;
-                    q.offer(i - 1);
+                if(i == n - 1) {
+                    return steps;
                 }
 
-                // adjacent right
-                if (i + 1 < n && !vis[i + 1]) {
-                    vis[i + 1] = true;
-                    q.offer(i + 1);
+                // i - 1
+                if(i - 1 >= 0 && !visited[i - 1]) {
+
+                    queue.offer(i - 1);
+                    visited[i - 1] = true;
                 }
 
-                // teleportation
-                int val = nums[i];
+                // i + 1
+                if(i + 1 < n && !visited[i + 1]) {
 
-                if (prime[val]) {
+                    queue.offer(i + 1);
+                    visited[i + 1] = true;
+                }
 
-                    List<Integer> next = map.get(val);
+                // skip if not prime or already processed
+                if(!isPrime[nums[i]] || seen.contains(nums[i])) {
+                    continue;
+                }
 
-                    if (next != null) {
+                // visit all multiples
+                for(int multiple = nums[i];
+                    multiple <= maxEl;
+                    multiple += nums[i]) {
 
-                        for (int idx : next) {
+                    if(!mp.containsKey(multiple)) {
+                        continue;
+                    }
 
-                            if (!vis[idx]) {
-                                vis[idx] = true;
-                                q.offer(idx);
-                            }
+                    for(int j : mp.get(multiple)) {
+
+                        if(!visited[j]) {
+
+                            queue.offer(j);
+                            visited[j] = true;
                         }
-                        map.remove(val);
                     }
                 }
+
+                seen.add(nums[i]);
             }
+
             steps++;
         }
+
         return -1;
-    }
-    static boolean[] sieve() {
-
-        boolean[] isPrime = new boolean[MAX + 1];
-        Arrays.fill(isPrime, true);
-
-        isPrime[0] = false;
-        isPrime[1] = false;
-
-        for (int i = 2; i * i <= MAX; i++) {
-
-            if (isPrime[i]) {
-
-                for (int j = i * i; j <= MAX; j += i) {
-                    isPrime[j] = false;
-                }
-            }
-        }
-        return isPrime;
-    }
-
-    
-    List<Integer> getPrimeFactors(int x) {
-
-        List<Integer> res = new ArrayList<>();
-
-        for (int p = 2; p * p <= x; p++) {
-
-            if (x % p == 0) {
-
-                res.add(p);
-
-                while (x % p == 0) {
-                    x /= p;
-                }
-            }
-        }
-        if (x > 1) res.add(x);
-        return res;
     }
 }
