@@ -1,7 +1,5 @@
 class Solution {
-
     private boolean[] isPrime;
-
     private void buildSieve(int maxEl) {
 
         isPrime = new boolean[maxEl + 1];
@@ -10,31 +8,20 @@ class Solution {
         if(maxEl >= 0) isPrime[0] = false;
         if(maxEl >= 1) isPrime[1] = false;
 
-        for(int num = 2; num * num <= maxEl; num++) {
-
-            if(isPrime[num]) {
-
-                for(int multiple = num * num;
-                    multiple <= maxEl;
-                    multiple += num) {
-
-                    isPrime[multiple] = false;
-                }
+        for(int i = 2; i*i <= maxEl; i++) {
+            if(isPrime[i]) {
+                for(int j = i * i; j <= maxEl; j += i) isPrime[j] = false;
             }
         }
     }
 
     public int minJumps(int[] nums) {
-
         int n = nums.length;
-
         HashMap<Integer, List<Integer>> mp = new HashMap<>();
         int maxEl = 0;
 
         for(int i = 0; i < n; i++) {
-
             mp.computeIfAbsent(nums[i], k -> new ArrayList<>()).add(i);
-
             maxEl = Math.max(maxEl, nums[i]);
         }
 
@@ -51,61 +38,42 @@ class Solution {
         int steps = 0;
 
         while(!queue.isEmpty()) {
-
             int size = queue.size();
-
             while(size-- > 0) {
-
                 int i = queue.poll();
-
-                if(i == n - 1) {
-                    return steps;
-                }
+                if(i == n - 1) return steps;
 
                 // i - 1
                 if(i - 1 >= 0 && !visited[i - 1]) {
-
                     queue.offer(i - 1);
                     visited[i - 1] = true;
                 }
 
                 // i + 1
                 if(i + 1 < n && !visited[i + 1]) {
-
                     queue.offer(i + 1);
                     visited[i + 1] = true;
                 }
 
                 // skip if not prime or already processed
-                if(!isPrime[nums[i]] || seen.contains(nums[i])) {
-                    continue;
-                }
+                if(!isPrime[nums[i]] || seen.contains(nums[i])) continue;
 
                 // visit all multiples
-                for(int multiple = nums[i];
-                    multiple <= maxEl;
-                    multiple += nums[i]) {
+                for(int multiple = nums[i]; multiple <= maxEl; multiple += nums[i]) {
 
-                    if(!mp.containsKey(multiple)) {
-                        continue;
-                    }
+                    if(!mp.containsKey(multiple)) continue;
 
                     for(int j : mp.get(multiple)) {
-
                         if(!visited[j]) {
-
                             queue.offer(j);
                             visited[j] = true;
                         }
                     }
                 }
-
                 seen.add(nums[i]);
             }
-
             steps++;
         }
-
         return -1;
     }
 }
