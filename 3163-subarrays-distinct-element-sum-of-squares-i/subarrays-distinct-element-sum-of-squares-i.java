@@ -9,16 +9,11 @@ class Solution {
 
             for (int j = i; j < n; j++) {
                 int num = nums.get(j);
-
-                if (freq[num] == 0) {
-                    distinct++;
-                }
-
+                if (freq[num] == 0) distinct++;
                 freq[num]++;
                 ans += distinct * distinct;
             }
         }
-
         return ans;
     }
 }
