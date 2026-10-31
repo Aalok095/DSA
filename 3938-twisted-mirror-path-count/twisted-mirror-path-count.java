@@ -1,10 +1,10 @@
 class Solution {
-    int LEFT = 0; // Arrived at current cell from left cell (it means it was moving right)
-    int UP = 1;   // Arrived at current cell from up cell (it means it was moving down)
+    int LEFT = 0; 
+    int UP = 1;   
     int MOD = 1_000_000_007;
-    int m; // rows
-    int n; // cols
-
+    int m; 
+    int n; 
+    
     int solve(int[][] grid, int i, int j, int cameFrom, int[][][] t) {
         if (i >= m || j >= n) return 0;
         if (i == m - 1 && j == n - 1) return 1;
